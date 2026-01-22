@@ -1,7 +1,6 @@
 /.phpunit.cache
 /node_modules
 /public/assets/install.sql
-/resources/views/components/home_made_by_builder
 /storage/*.key
 /vendor
 .env.backup
