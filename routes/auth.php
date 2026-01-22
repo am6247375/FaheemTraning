@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register.form');
+    Route::get('register/{type?}', [RegisteredUserController::class, 'create'])
+        ->name('register.formm');
 
 
     Route::post('register', [RegisteredUserController::class, 'store'])

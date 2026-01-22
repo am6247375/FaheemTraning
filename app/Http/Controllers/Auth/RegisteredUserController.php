@@ -27,9 +27,10 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      */
-    public function create(): View
+
+    public function create($type = "student"): View
     {
-        return view('auth.register');
+        return view('auth.register', ['type' => $type]);
     }
 
     /**
@@ -40,66 +41,80 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
-            'phone' => 'required',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users,email',
+            'phone'    => 'required|string|max:50',
             'password' => ['required', Rules\Password::defaults()],
-            'an_instructor' => 'nullable|boolean',
+
+            // حقول المدرس
+            'skills'   => 'nullable|string|max:255',
+            'photo'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'biography_file' => 'nullable|file|mimes:pdf,doc,docx|max:4096',
+            'description' => 'nullable|string',
+            'academic_degree' => 'nullable|string|max:255',
+            'has_saudi_curriculum_experience' => 'nullable|boolean',
         ]);
-        $anInstructor = $request->boolean('an_instructor');
 
+        /* =========================
+       تسجيل مدرس
+    ========================= */
+        if ($request->type === 'instructor') {
 
-        if ($anInstructor) {
             $data = [
-                'name'        => $request->name,
-                'about'       => $request->about,
-                'phone'       => $request->phone,
-                'address'     => $request->address,
-                'email'       => $request->email,
-                'facebook'    => $request->facebook,
-                'twitter'     => $request->twitter,
-                'website'     => $request->website,
-                'linkedin'    => $request->linkedin,
-                'paymentkeys' => json_encode($request->paymentkeys),
-                'status'      => '1',
-                'password'    => Hash::make($request->password),
-                'role'        => 'instructor',
+                'name'  => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'skills' => $request->skills,
+                'about' => $request->description,
+
+                'role' => 'instructor',
+                'status' => 0, // بانتظار الموافقة
+                'password' => Hash::make($request->password),
             ];
 
+            /* صورة شخصية */
             if ($request->hasFile('photo')) {
-                $path = "uploads/users/instructor/" . nice_file_name($request->name, $request->photo->extension());
-                FileUploader::upload($request->photo, $path, 400, null, 200, 200);
+                $path = 'uploads/users/instructor/photos/' .
+                    time() . '_' . $request->photo->getClientOriginalName();
+
+                $request->photo->move(public_path('uploads/users/instructor/photos'), basename($path));
                 $data['photo'] = $path;
             }
-            if ($request->email_verified == 1) {
-                $data['email_verified_at'] = date('Y-m-d H:i:s');
+
+            /* CV / Biography */
+            if ($request->hasFile('biography_file')) {
+                $path = 'uploads/users/instructor/cv/' .
+                    time() . '_' . $request->biography_file->getClientOriginalName();
+
+                $request->biography_file->move(public_path('uploads/users/instructor/cv'), basename($path));
+                $data['biography'] = $path;
             }
+
             $user = User::create($data);
 
-            if ($request->email_verified != 1) {
-                $user->sendEmailVerificationNotification();
-            }
+            $user->sendEmailVerificationNotification();
 
-            Session::flash('success', get_phrase('Instructor added successfully'));
-
-            // تسجيل الدخول تلقائياً بعد التسجيل (اختياري حسب رغبتك)
             Auth::login($user);
+            Session::flash('success', get_phrase('Instructor registered successfully'));
 
-            return redirect()->route('admin.instructor.index');
+            return redirect()->route('instructor.dashboard');
         }
 
-        // جزء الطالب (Student)
+        /* =========================
+       تسجيل طالب
+    ========================= */
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
+            'name'     => $request->name,
+            'email'    => $request->email,
+            'phone'    => $request->phone,
             'password' => Hash::make($request->password),
-            'role' => 'student', // يفضل تحديد الـ role هنا أيضاً
+            'role'     => 'student',
+            'status'   => 1,
         ]);
 
         event(new Registered($user));
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('dashboard');
     }
 }

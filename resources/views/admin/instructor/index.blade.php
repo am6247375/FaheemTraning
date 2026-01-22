@@ -17,7 +17,8 @@
                     {{ get_phrase('Instructor List') }}
                 </h4>
 
-                <a href="{{ route('admin.instructor.create') }}" class="btn ol-btn-outline-secondary d-flex align-items-center cg-10px">
+                <a href="{{ route('admin.instructor.create') }}"
+                    class="btn ol-btn-outline-secondary d-flex align-items-center cg-10px">
                     <span class="fi-rr-plus"></span>
                     <span>{{ get_phrase('Add new Instructor') }}</span>
                 </a>
@@ -37,10 +38,13 @@
                         </button>
                         <ul class="dropdown-list">
                             <li>
-                                <a class="dropdown-item" href="#" onclick="downloadPDF('.print-table', 'instructor-list')"><i class="fi-rr-file-pdf"></i> {{ get_phrase('PDF') }}</a>
+                                <a class="dropdown-item" href="#"
+                                    onclick="downloadPDF('.print-table', 'instructor-list')"><i class="fi-rr-file-pdf"></i>
+                                    {{ get_phrase('PDF') }}</a>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="#" onclick="window.print();"><i class="fi-rr-print"></i> {{ get_phrase('Print') }}</a>
+                                <a class="dropdown-item" href="#" onclick="window.print();"><i
+                                        class="fi-rr-print"></i> {{ get_phrase('Print') }}</a>
                             </li>
                         </ul>
                     </div>
@@ -50,10 +54,12 @@
                     <form class="form-inline" action="{{ route('admin.instructor.index') }}" method="get">
                         <div class="row row-gap-3">
                             <div class="col-md-9">
-                                <input type="text" class="form-control ol-form-control" name="search" value="{{ request('search') }}" placeholder="{{ get_phrase('Search user') }}" />
+                                <input type="text" class="form-control ol-form-control" name="search"
+                                    value="{{ request('search') }}" placeholder="{{ get_phrase('Search user') }}" />
                             </div>
                             <div class="col-md-3">
-                                <button type="submit" class="btn ol-btn-primary w-100" id="submit-button"> {{ get_phrase('Search') }}</button>
+                                <button type="submit" class="btn ol-btn-primary w-100" id="submit-button">
+                                    {{ get_phrase('Search') }}</button>
                             </div>
                         </div>
                     </form>
@@ -64,7 +70,8 @@
                 <div class="col-md-12">
                     <!-- Table -->
                     @if (count($instructors) > 0)
-                        <div class="admin-tInfo-pagi d-flex justify-content-between justify-content-center align-items-center flex-wrap gr-15">
+                        <div
+                            class="admin-tInfo-pagi d-flex justify-content-between justify-content-center align-items-center flex-wrap gr-15">
                             <p class="admin-tInfo">
                                 {{ get_phrase('Showing') . ' ' . count($instructors) . ' ' . get_phrase('of') . ' ' . $instructors->total() . ' ' . get_phrase('data') }}
                             </p>
@@ -77,6 +84,7 @@
                                         <th scope="col">{{ get_phrase('Name') }}</th>
                                         <th scope="col">{{ get_phrase('Phone') }}</th>
                                         <th scope="col">{{ get_phrase('Number Of Course') }}</th>
+                                        <th scope="col">{{ get_phrase('status') }}</th>
                                         <th class="print-d-none" scope="col">{{ get_phrase('Options') }}</th>
                                     </tr>
                                 </thead>
@@ -89,7 +97,8 @@
                                             <td>
                                                 <div class="dAdmin_profile d-flex align-items-center min-w-200px">
                                                     <div class="dAdmin_profile_img">
-                                                        <img class="img-fluid rounded-circle image-45" width="45" height="45" src="{{ get_image($row->photo) }}" />
+                                                        <img class="img-fluid rounded-circle image-45" width="45"
+                                                            height="45" src="{{ get_image($row->photo) }}" />
                                                     </div>
                                                     <div class="ms-1">
                                                         <h4 class="title fs-14px">{{ $row->name }}</h4>
@@ -106,26 +115,54 @@
                                                 {{ App\Models\Course::where('user_id', $row->id)->count() }}
                                                 {{ get_phrase('Courses') }}
                                             </td>
+                                            <td>
+                                                <div class="dAdmin_info_name min-w-150px">
+                                                    <p
+                                                        class="px-2 py-1 rounded text-center title  {{ $row->status == 1 ? 'bg-success text-white' : 'bg-danger text-white' }}">
+                                                        {{ $row->status == 1 ? get_phrase('Active') : get_phrase('Inactive') }}
+                                                    </p>
+                                                </div>
+                                            </td>
+
                                             <td class="print-d-none">
                                                 <div class="dropdown ol-icon-dropdown ol-icon-dropdown-transparent">
-                                                    <button class="btn ol-btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <button class="btn ol-btn-secondary dropdown-toggle" type="button"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
                                                         <span class="fi-rr-menu-dots-vertical"></span>
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li>
-                                                            <a class="dropdown-item" href="{{ route('admin.courses', ['instructor' => $row->id]) }}">{{ get_phrase('View courses') }}</a>
+                                                            <a class="dropdown-item"
+                                                                href="{{ route('admin.courses', ['instructor' => $row->id]) }}">{{ get_phrase('View courses') }}</a>
                                                         </li>
 
                                                         <li>
-                                                            <a class="dropdown-item" href="{{ route('admin.instructor.edit', $row->id) }}">{{ get_phrase('Edit') }}</a>
+                                                            <a class="dropdown-item"
+                                                                href="{{ route('admin.instructor.edit', $row->id) }}">{{ get_phrase('Edit') }}</a>
                                                         </li>
 
                                                         <li>
-                                                            <a class="dropdown-item" onclick="confirmModal('{{ route('admin.instructor.delete', $row->id) }}')" href="javascript:void(0)">{{ get_phrase('Remove account') }}</a>
+                                                            <a class="dropdown-item"
+                                                                onclick="confirmModal('{{ route('admin.instructor.delete', $row->id) }}')"
+                                                                href="javascript:void(0)">{{ get_phrase('Remove account') }}</a>
                                                         </li>
                                                         <li>
-                                                            <a class="dropdown-item" onclick="confirmModal('{{ route('admin.instructor.revoke_access', $row->id) }}')" href="javascript:void(0)">{{ get_phrase('Revoke Instructor Access') }}</a>
+                                                            <form
+                                                                action="{{ $row->status == 1
+                                                                    ? route('admin.instructor.revoke_access', $row->id)
+                                                                    : route('admin.instructor.activate_access', $row->id) }}"
+                                                                method="POST" style="display:inline;">
+                                                                @csrf
+                                                                @method('PATCH')
+                                                                <button type="submit" class="dropdown-item">
+                                                                    {{ $row->status == 1 ? get_phrase('Revoke Instructor Access') : get_phrase('Activate Instructor Access') }}
+                                                                </button>
+                                                            </form>
+
+
                                                         </li>
+
+
                                                     </ul>
                                                 </div>
                                             </td>
@@ -139,7 +176,8 @@
                     @endif
                     <!-- Data info and Pagination -->
                     @if (count($instructors) > 0)
-                        <div class="admin-tInfo-pagi d-flex justify-content-between justify-content-center align-items-center flex-wrap gr-15">
+                        <div
+                            class="admin-tInfo-pagi d-flex justify-content-between justify-content-center align-items-center flex-wrap gr-15">
                             <p class="admin-tInfo">
                                 {{ get_phrase('Showing') . ' ' . count($instructors) . ' ' . get_phrase('of') . ' ' . $instructors->total() . ' ' . get_phrase('data') }}
                             </p>

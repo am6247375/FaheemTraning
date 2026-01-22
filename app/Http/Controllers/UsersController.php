@@ -464,22 +464,25 @@ class UsersController extends Controller
             return redirect()->back();
         }
     }
-
-    public function revokeAccess($id)
+    public function revoke_access($id)
     {
-        $user = User::findOrFail($id);
-
-        if ($user->role === 'instructor') {
-            $user->role = 'student';
-            $user->save();
-
-            Session::flash('success', get_phrase('Instructor has been switched to Student successfully.'));
-        } else {
-            Session::flash('error', get_phrase('This user is not an instructor.'));
-        }
-
+        $instructor = User::findOrFail($id);
+        $instructor->status = 0;
+        $instructor->save();
+        Session::flash('success', get_phrase('Instructor access revoked successfully.'));
         return redirect()->back();
     }
+
+    public function activate_access($id)
+    {
+        $instructor = User::findOrFail($id);
+        $instructor->status = 1;
+        $instructor->save();
+        Session::flash('success', get_phrase('Instructor activated successfully.'));
+        return redirect()->back();
+    }
+
+
 
     public function student_index()
     {

@@ -427,7 +427,7 @@ class SettingController extends Controller
         // Validate the uploaded file
         $request->validate([
             'language_file' => 'required|mimetypes:application/json,text/plain|max:2048',
-            'language_id' => 'required|exists:languages,id' // Ensuring language exists
+            'language_id' => 'required|exists:languages,id'
         ]);
 
         // Get the uploaded file
@@ -647,7 +647,7 @@ class SettingController extends Controller
     // {
     //     $page_data = array();
     //     $page_data['zaps'] = ZapierSetting::all();
-                                        
+
     //     $page_data['active_tab'] = !empty($active_tab) ? $active_tab : 'user_registration';
 
     //     return view('admin.setting.zapier_setting', $page_data);
@@ -671,11 +671,11 @@ class SettingController extends Controller
     //     return redirect()->back()->with('error', 'Seo update failed');
     // }
 
-      // Amazon S3
+    // Amazon S3
     public function amazom_s3_settings($active_tab = "")
     {
-       $page_data['amazon_s3_data'] = get_settings('amazon_s3', true);
-       $page_data['view_path'] = 'setting.amazon_s3_settings';
+        $page_data['amazon_s3_data'] = get_settings('amazon_s3', true);
+        $page_data['view_path'] = 'setting.amazon_s3_settings';
         return view('admin.setting.amazom_s3_setting', $page_data);
     }
 

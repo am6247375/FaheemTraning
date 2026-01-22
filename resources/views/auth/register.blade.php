@@ -15,12 +15,17 @@
             <div class="row">
                 <div class="col-lg-7 col-md-6">
                     <div class="login-img">
-                        <img src="{{ asset('assets/frontend/' . get_frontend_settings('theme') . '/image/signup.gif') }}" alt="register-banner">
+                        <img src="{{ asset('assets/frontend/' . get_frontend_settings('theme') . '/image/signup.gif') }}"
+                            alt="register-banner">
                     </div>
                 </div>
                 <div class="col-lg-5 col-md-6">
-                    <form  action="{{ route('register') }}" class="global-form login-form mt-25" id="login-form" method="post" enctype="multipart/form-data">@csrf
-                        <h4 class="g-title">{{ get_phrase('Sign Up') }}</h4>
+                    <form action="{{ route('register') }}" class="global-form login-form mt-25" id="login-form" method="post"
+                        enctype="multipart/form-data">@csrf
+                        <h4 class="g-title">
+                            {{ $type === 'instructor' ? get_phrase('Register as Instructor') : get_phrase('Register as Student') }}
+                        </h4>
+
                         <p class="description">{{ get_phrase('See your growth and get consulting support! ') }}</p>
                         <div class="form-group mb-5">
                             <label for="" class="form-label">{{ get_phrase('Name') }}</label>
@@ -30,10 +35,15 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                         <div class="form-group mb-5">
-                                    <label for="phone" class="form-label">{{ get_phrase('Phone') }}</label>
-                                    <input class="form-control" id="phone" type="phone" name="phone" placeholder="{{ get_phrase('Enter your phone number') }}">
-                                </div>
+                        <div class="form-group mb-5">
+                            <label for="phone" class="form-label">{{ get_phrase('Phone') }}</label>
+                            <input class="form-control" id="phone" type="tel" name="phone"
+                                placeholder="{{ get_phrase('Enter your phone number') }}">
+                            @error('phone')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+
+                        </div>
                         <div class="form-group mb-5">
                             <label for="" class="form-label">{{ get_phrase('Email') }}</label>
                             <input type="email" name="email" class="form-control" placeholder="Your Email">
@@ -50,34 +60,54 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+                        <input type="hidden" name="type" value="{{ $type }}">
 
-                        @if (get_settings('allow_instructor'))
-                          <div class="form-group mb-5">
-    <input id="an_instructor" type="checkbox" name="an_instructor" value="1">
-<label for="an_instructor">{{ get_phrase('Apply to Become an instructor') }}</label>
-</div>
 
-                            <div id="become-instructor-fields" class="d-none">
+                        @if ($type == 'instructor')
+                            <!-- Skills -->
+                            <div class="form-group mb-4">
+                                <label class="form-label">{{ get_phrase('Skills') }}</label>
+                                <input type="text" name="skills" class="form-control" value="{{ old('skills') }}"
+                                    placeholder="{{ get_phrase('Separate skills by comma, e.g. Math, Physics') }}">
+                                @error('skills')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
-                                <div class="form-group mb-5">
-                                    <label for="document" class="form-label">{{ get_phrase('Document') }} <small>(doc, docs, pdf, txt, png, jpg, jpeg)</small></label>
-                                    <input class="form-control" id="document" type="file" name="document">
-                                    <small>{{ get_phrase('Provide some documents about your qualifications') }}</small>
-                                </div>
-                                <div class="form-group mb-5">
-                                    <label for="description" class="form-label">{{ get_phrase('Message') }}</label>
-                                    <textarea class="form-control" id="description" name="description" rows="4"></textarea>
-                                </div>
+                            <!-- Photo -->
+                            <div class="form-group mb-4">
+                                <label class="form-label">{{ get_phrase('Profile Photo') }}</label>
+                                <input type="file" name="photo" class="form-control">
+                                @error('photo')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <!-- CV / Biography -->
+                            <div class="form-group mb-4">
+                                <label class="form-label">{{ get_phrase('Upload Your CV / Biography') }}</label>
+                                <input type="file" name="biography_file" class="form-control">
+                                @error('biography_file')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="form-group mb-5">
+                                <label for="description" class="form-label">{{ get_phrase('Message') }}</label>
+                                <textarea class="form-control" id="description" name="description" rows="4"></textarea>
                             </div>
                         @endif
 
                         @if (get_frontend_settings('recaptcha_status'))
-                            <button class="eBtn gradient w-100 g-recaptcha" data-sitekey="{{ get_frontend_settings('recaptcha_sitekey') }}" data-callback='onLoginSubmit' data-action='submit'>{{ get_phrase('Sign Up') }}</button>
+                            <button class="eBtn gradient w-100 g-recaptcha"
+                                data-sitekey="{{ get_frontend_settings('recaptcha_sitekey') }}"
+                                data-callback='onLoginSubmit' data-action='submit'>{{ get_phrase('Sign Up') }}</button>
                         @else
                             <button type="submit" class="eBtn gradient w-100">{{ get_phrase('Sign Up') }}</button>
                         @endif
 
-                        <p class="mt-20">{{ get_phrase('Already have account?') }} <a href="{{ route('login') }}">{{ get_phrase('Sign in') }}</a></p>
+                        <p class="mt-20">{{ get_phrase('Already have account?') }}
+                            <a href="{{ route('login') }}">{{ get_phrase('Sign in') }}</a>
+                        </p>
                     </form>
                 </div>
             </div>
@@ -118,19 +148,5 @@
         function onLoginSubmit(token) {
             document.getElementById("login-form").submit();
         }
-
-        $(document).ready(function() {
-            $('#an_instructor').on('change', function () {
-                if ($(this).is(':checked')) {
-                    $('#become-instructor-fields').removeClass('d-none');
-                    $('#phone').attr('required', true);
-                    $('#document').attr('required', true);
-                } else {
-                    $('#become-instructor-fields').addClass('d-none');
-                    $('#phone').removeAttr('required');
-                    $('#document').removeAttr('required');
-                }
-            });
-        });
     </script>
 @endpush

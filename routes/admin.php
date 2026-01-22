@@ -144,7 +144,8 @@ Route::name('admin.')->prefix('admin')->middleware(['admin', 'verified'])->group
         Route::get('instructor_application/approve/{id}', 'instructor_application_approve')->name('instructor.application.approve');
         Route::get('instructor_application/delete/{id}', 'instructor_application_delete')->name('instructor.application.delete');
         Route::get('instructor_application/document/download/{id}', 'instructor_application_download')->name('instructor.application.download');
-        Route::get('instructor/{id}/revoke-access', 'revokeAccess')->name('instructor.revoke_access');
+        Route::patch('instructor/{id}/activate', 'revoke_access')->name('instructor.revoke_access');
+        Route::patch('instructor/{id}/revoke-access', 'activate_access')->name('instructor.activate_access');
 
         // Student route
         Route::get('student', 'student_index')->name('student.index');
