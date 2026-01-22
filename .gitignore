@@ -1,15 +1,5 @@
 /.phpunit.cache
 /node_modules
-/public/build
-/public/hot
-/public/storage
-/public/uploads/*.jpg
-/public/uploads/*.png
-/public/uploads/*.mp4
-/public/uploads/*.jpg
-/public/uploads/*.png
-/public/uploads/*.mp4
-/public/uploads
 /public/assets/install.sql
 /resources/views/components/home_made_by_builder
 /storage/*.key

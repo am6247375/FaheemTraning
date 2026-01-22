@@ -31,8 +31,10 @@
 
     <!-- FlatIcons Css -->
     <link rel="stylesheet" href="{{ asset('assets/global/icons/uicons-bold-rounded/css/uicons-bold-rounded.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/global/icons/uicons-regular-rounded/css/uicons-regular-rounded.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/global/icons/uicons-solid-rounded/css/uicons-solid-rounded.css') }}" />
+    <link rel="stylesheet"
+        href="{{ asset('assets/global/icons/uicons-regular-rounded/css/uicons-regular-rounded.css') }}" />
+    <link rel="stylesheet"
+        href="{{ asset('assets/global/icons/uicons-solid-rounded/css/uicons-solid-rounded.css') }}" />
 
     <!-- Custom Fonts -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/default/css/custome-front/custom-fronts.css') }}">
@@ -48,7 +50,8 @@
     <link rel="stylesheet" href="{{ asset('assets/frontend/default/css/responsive.css') }}">
 
     <!-- Yaireo Tagify -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/global/tagify-master/dist/tagify.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/global/tagify-master/dist/tagify.css') }}"
+        rel="stylesheet" type="text/css" />
 
     <!-- Custom Style -->
     <link rel="stylesheet" href="{{ asset('assets/frontend/default/css/custom_style.css') }}">
@@ -101,6 +104,61 @@
             @endif
         @endif
     @endif
+    <a href="{{ route('courses') }}" class="floating-book-btn">
+        <span class="text">{{ get_phrase('Get Started') }}</span>
+    </a>
+
+    <style>
+        .floating-book-btn {
+            display: none;
+        }
+
+
+        @media (max-width: 991.98px) {
+            .floating-book-btn {
+                display: flex;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background-image: linear-gradient(to right, #2f57ef 0%, #c664ff 51%, #c664ff 100%);
+                color: #fff;
+                padding: 14px 18px;
+                border-radius: 30px;
+                align-items: center;
+                gap: 10px;
+                font-weight: 600;
+                background-size: 200% auto;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                text-decoration: none;
+                z-index: 9999;
+                transition: all 0.3s ease;
+                animation: floatBtn 2s ease-in-out infinite;
+                /* حركة تأرجح */
+            }
+
+            /* تأثير عند المرور بالماوس */
+            .floating-book-btn:hover {
+                transform: scale(1.1) rotate(-2deg);
+                background-position: right center;
+                /* تحريك التدرج */
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            }
+
+            /* حركة التأرجح */
+            @keyframes floatBtn {
+
+                0%,
+                100% {
+                    transform: translateY(0px);
+                }
+
+                50% {
+                    transform: translateY(-8px);
+                }
+            }
+        }
+    </style>
+
 
     <!-- Bootstrap Js -->
     <script src="{{ asset('assets/frontend/default/js/bootstrap.bundle.min.js') }}"></script>
@@ -140,7 +198,7 @@
     <!-- Main Js -->
     <script src="{{ asset('assets/frontend/default/js/script.js') }}"></script>
 
-    @if(get_frontend_settings('cookie_status'))
+    @if (get_frontend_settings('cookie_status'))
         @include('frontend.default.cookie')
     @endif
 
