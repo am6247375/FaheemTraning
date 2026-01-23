@@ -10,7 +10,8 @@
 <!-----------  Header Area Start  ------------->
 <header class="header-area">
     <div class="container">
-        <div class="row flex-md-nowrap navv">
+        <div class="row flex-md-nowrap "
+            style="display: flex;align-items: center;flex-wrap: nowrap;justify-content: center;flex-direction: row">
             <div class="col-auto">
                 <div class="logo-image">
                     <a href="{{ route('home') }}">
@@ -25,7 +26,7 @@
                 </div>
             </div>
 
-            <div class="col-auto" dir="rtl">
+            <div class="col-auto d-none d-sm-block" dir="rtl">
                 <div class="header-menu d-flex justify-content-end me-lg-auto ms-lg-0 ms-auto mt-2 pt-1">
                     <div class="nav-menu w-100">
                         <ul class="primary-menu main-menu-ul d-flex align-items-center w-100 drop-area">
@@ -139,29 +140,7 @@
                 </div>
             </div>
 
-            {{-- <div class="col-sm-5 col-md-3 col-xl-4 ms-lg-0 col-auto ms-auto">
-                <!-- Search for large screens -->
-                <form action="{{ route('courses') }}" method="get"
-                    class="Esearch_entry d-none d-sm-inline-block w-100 ms-4 mt-2">
-                    <input type="text" name="search" class="form-control"
-                        placeholder="{{ get_phrase('Search...') }}" value="{{ request()->input('search') ?? '' }}">
-                    <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </form>
 
-                <!-- Floating search for small screens -->
-                <div class="floating-searchbar d-inline-block d-sm-none @auth loged-in @endauth">
-                    <button type="button" class="mt-1 py-3"
-                        onclick="this.parentElement.querySelector('form').classList.toggle('show')">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
-                    <form action="{{ route('courses') }}" method="get">
-                        <input type="text" name="search" class="form-control"
-                            value="{{ request()->input('search') ?? '' }}"
-                            placeholder="{{ get_phrase('Search courses') }}">
-                        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    </form>
-                </div>
-            </div> --}}
 
             <div class="col-auto">
                 <div class="primary-end d-flex align-items-center">

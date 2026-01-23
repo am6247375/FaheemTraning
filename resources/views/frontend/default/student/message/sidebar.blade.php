@@ -3,7 +3,8 @@
             <div class="search-box">
                 <form action="" class="Esearch_entry">
                     @csrf
-                    <input type="text" name="user_email" id="search_student" class="form-control" placeholder="{{get_phrase('Search email')}}">
+                    <input type="text" name="user_email" id="search_student" class="form-control"
+                        placeholder="{{ get_phrase('Search email') }}">
                     <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </form>
 
@@ -16,7 +17,10 @@
             <div class="contacts d-flex flex-column">
                 @php
                     $my_id = auth()->user()->id;
-                    $my_threads = App\Models\MessageThread::where('contact_one', $my_id)->orWhere('contact_two', $my_id)->orderBy('updated_at', 'desc')->get();
+                    $my_threads = App\Models\MessageThread::where('contact_one', $my_id)
+                        ->orWhere('contact_two', $my_id)
+                        ->orderBy('updated_at', 'desc')
+                        ->get();
                 @endphp
                 @foreach ($my_threads as $thread)
                     @php
@@ -24,7 +28,8 @@
                         $number_of_unread_message = $thread->messages()->where('read', '!=', 1)->count();
                     @endphp
 
-                    <a href="{{ route('message', ['inbox' => $thread->code, 'instructor' => $thread->user->id]) }}" class="contact border-start mb-3 @if ($thread->code == request()->query('inbox')) active @endif">
+                    <a href="{{ route('message', ['inbox' => $thread->code, 'instructor' => $thread->user->id]) }}"
+                        class="contact border-start mb-3 @if ($thread->code == request()->query('inbox')) active @endif">
                         <div class="ins-nav">
 
                             <div class="ins-left align-items-start">
