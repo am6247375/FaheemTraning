@@ -118,6 +118,8 @@
             .floating-book-btn {
                 display: flex;
                 position: fixed;
+                justify-content: center;
+                width: 90%;
                 bottom: 20px;
                 right: 20px;
                 background-image: linear-gradient(to right, #2f57ef 0%, #c664ff 51%, #c664ff 100%);

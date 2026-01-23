@@ -7,11 +7,24 @@
     $current_route = Route::currentRouteName();
 @endphp
 
+<style>
+    .search-form .input-group {
+        transition: all 0.3s ease;
+    }
+
+    .search-form .form-control:focus {
+        border-color: #0d6efd;
+        background-color: #f8f9fa;
+    }
+
+    .search-form .form-control:focus+.btn {
+        border-color: #0d6efd;
+    }
+</style>
 <!-----------  Header Area Start  ------------->
 <header class="header-area">
     <div class="container">
-        <div class="row flex-md-nowrap "
-            style="display: flex;align-items: center;flex-wrap: nowrap;justify-content: center;flex-direction: row">
+        <div class="row flex-nowrap align-items-center justify-content-between">
             <div class="col-auto">
                 <div class="logo-image">
                     <a href="{{ route('home') }}">
@@ -274,20 +287,7 @@
                                 </div>
                             </div>
                         </div>
-                        <style>
-                            .search-form .input-group {
-                                transition: all 0.3s ease;
-                            }
 
-                            .search-form .form-control:focus {
-                                border-color: #0d6efd;
-                                background-color: #f8f9fa;
-                            }
-
-                            .search-form .form-control:focus+.btn {
-                                border-color: #0d6efd;
-                            }
-                        </style>
 
                     </div>
 
